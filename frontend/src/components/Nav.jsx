@@ -6,7 +6,7 @@ const Nav = () => {
     <nav className="bg-purple-100 mt-10 flex gap-10 w-4xl justify-between rounded-lg text-purple-700 font-bold">
       <Link
         className="flex flex-col items-center bg-white m-6 p-8 rounded-2xl w-2xl hover:scale-105 duration-150"
-        to={'/'}
+        to={'/home'}
       >
         <List size={48} color="#7B1FA2" />
         TOTAL

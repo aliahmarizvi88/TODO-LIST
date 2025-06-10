@@ -1,13 +1,22 @@
 import React, { useState } from 'react';
 import AddTask from './AddTask';
+import UpdateTask from './UpdateTask';
 import { Plus, Trash2, Pencil } from 'lucide-react';
 import { useList } from '../context/ListContext';
+import Search from './Search';
 
 const List = () => {
   const [dailogueOpen, setDailogueOpen] = useState(false);
+  const [updateOpen, setUpdateOpen] = useState(false);
+  const [selectedTask, setSelectedTask] = useState(null);
+  const [search, setSearch] = useState('');
   const { tasks, handleDelete, handleStatusChange } = useList();
 
-  const visibleTasks = tasks.filter((item) => item.status !== 'Deleted');
+  const visibleTasks = tasks.filter(
+    (item) =>
+      item.status !== 'Deleted' &&
+      item.task.toLowerCase().includes(search.toLowerCase())
+  );
 
   return (
     <div className="w-4xl mx-auto mt-12 p-8 bg-white rounded-xl shadow-lg">
@@ -15,10 +24,10 @@ const List = () => {
         My Tasks
       </h1>
       <div className="flex flex-col sm:flex-row items-center justify-between mb-6 gap-4">
-        <input
-          type="search"
+        <Search
+          value={search}
+          onChange={setSearch}
           placeholder="Search tasks..."
-          className="flex-1 px-4 py-2 border border-purple-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400 transition"
         />
         <button
           className="flex gap-2 bg-purple-600 hover:bg-purple-700 text-white font-semibold px-6 py-2 rounded-lg shadow transition"
@@ -29,6 +38,11 @@ const List = () => {
         </button>
       </div>
       <AddTask open={dailogueOpen} onClose={() => setDailogueOpen(false)} />
+      <UpdateTask
+        open={updateOpen}
+        onClose={() => setUpdateOpen(false)}
+        taskData={selectedTask}
+      />
       <div className="overflow-x-auto">
         <table className="min-w-full text-purple-700">
           <thead>
@@ -108,7 +122,13 @@ const List = () => {
                   </span>
                 </td>
                 <td className="px-6 py-4 space-x-2">
-                  <button className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-lg transition">
+                  <button
+                    className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-lg transition"
+                    onClick={() => {
+                      setSelectedTask(item);
+                      setUpdateOpen(true);
+                    }}
+                  >
                     <Pencil size={16} />
                   </button>
                   <button

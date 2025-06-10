@@ -38,7 +38,16 @@ export const ListProvider = ({ children }) => {
         prev.map((task) => (task._id === id ? res.data : task))
       );
     } catch (error) {
-      console.log('Error updatinf task:', error);
+      console.log('Error updating task:', error);
+    }
+  };
+
+  const deleteAllTask = async () => {
+    try {
+      await axiosInstance.delete('/deleteTask');
+      fetchTasks();
+    } catch (error) {
+      console.log('Error deleting tasks', error);
     }
   };
 
@@ -60,6 +69,7 @@ export const ListProvider = ({ children }) => {
         updateTask,
         handleDelete,
         handleStatusChange,
+        deleteAllTask,
       }}
     >
       {children}

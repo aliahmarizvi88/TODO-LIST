@@ -1,14 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { RotateCcw } from 'lucide-react';
 import { useList } from '../context/ListContext';
 
 const Deleted = () => {
-  const { tasks, updateTask } = useList();
+  const { tasks, updateTask, deleteAllTask } = useList();
+  const [showDialog, setShowDialog] = useState(false);
 
   const deletedTasks = tasks.filter((item) => item.status === 'Deleted');
 
   const handleRestore = (item) => {
     updateTask(item._id, { status: 'Pending' });
+  };
+
+  const handleDeleteAll = async () => {
+    await deleteAllTask();
+    setShowDialog(false);
   };
 
   return (
@@ -22,10 +28,39 @@ const Deleted = () => {
           placeholder="Search tasks..."
           className="flex-1 px-4 py-2 border border-purple-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400 transition"
         />
-        <button className="flex gap-2 bg-purple-600 hover:bg-purple-700 text-white font-semibold px-6 py-2 rounded-lg shadow transition">
+        <button
+          className="flex gap-2 bg-purple-600 hover:bg-purple-700 text-white font-semibold px-6 py-2 rounded-lg shadow transition"
+          onClick={() => setShowDialog(true)}
+        >
           DELETE ALL
         </button>
       </div>
+      {showDialog && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
+          <div className="bg-white rounded-xl shadow-lg p-8 w-full max-w-sm">
+            <h2 className="text-xl font-bold text-purple-700 mb-4">
+              Confirm Delete
+            </h2>
+            <p className="mb-6 text-gray-700">
+              Are you sure you want to permanently delete all deleted tasks?
+            </p>
+            <div className="flex justify-end gap-4">
+              <button
+                className="px-4 py-2 rounded bg-gray-200 hover:bg-gray-300 text-gray-700 transition"
+                onClick={() => setShowDialog(false)}
+              >
+                Cancel
+              </button>
+              <button
+                className="px-4 py-2 rounded bg-red-600 hover:bg-red-700 text-white font-semibold transition"
+                onClick={handleDeleteAll}
+              >
+                Delete All
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       <div className="overflow-x-auto">
         <table className="min-w-full text-purple-700">
           <thead>

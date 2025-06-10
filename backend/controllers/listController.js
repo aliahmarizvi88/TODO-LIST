@@ -14,17 +14,11 @@ const handleAddItem = async (req, res) => {
 };
 const handleDeleteItem = async (req, res) => {
   try {
-    const { task, date, priority } = req.body;
-
-    const itemDeleted = await List.findOneAndDelete({
-      task,
-      date,
-      priority,
-    });
+    const itemDeleted = await List.deleteMany({ status: 'Deleted' });
 
     if (!itemDeleted) return res.status(404).json({ error: 'Task not found' });
 
-    return res.status(200).json({ message: 'Task deleted Sucessfully' });
+    return res.status(200).json({ message: 'Task deleted Successfully' });
   } catch (error) {
     return res.status(500).json({ message: `Internal Server Error ${error}` });
   }
