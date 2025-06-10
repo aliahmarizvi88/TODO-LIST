@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { RotateCcw } from 'lucide-react';
 import { useList } from '../context/ListContext';
+import Search from '../components/Search';
 
 const Deleted = () => {
   const { tasks, updateTask, deleteAllTask } = useList();
   const [showDialog, setShowDialog] = useState(false);
+  const [search, setSearch] = useState('');
 
   const deletedTasks = tasks.filter((item) => item.status === 'Deleted');
 
@@ -23,10 +25,10 @@ const Deleted = () => {
         Deleted Tasks
       </h1>
       <div className="flex flex-col sm:flex-row items-center justify-between mb-6 gap-4">
-        <input
-          type="search"
-          placeholder="Search tasks..."
-          className="flex-1 px-4 py-2 border border-purple-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400 transition"
+        <Search
+          value={search}
+          onChange={setSearch}
+          placeholder="Search deleted tasks..."
         />
         <button
           className="flex gap-2 bg-purple-600 hover:bg-purple-700 text-white font-semibold px-6 py-2 rounded-lg shadow transition"
